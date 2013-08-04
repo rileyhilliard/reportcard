@@ -14,21 +14,7 @@
     color: rgb(235, 235, 235);
     text-decoration: none;
 }
-.more-on-treehouse a {
-    opacity: .6;
-    position: relative;
-    display: inline-block;
-    top: 4px;
-    font-weight: 600;
-    font-family: helvetica neue;
-    -webkit-font-smoothing: antialiased;
-    z-index: 1 !important;
-    background-image: url('../img/gray-badge.png');
-    width: 100%;
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
+
 .back-image {
 
 }
@@ -163,6 +149,21 @@ img.moretreebadge { opacity: .6 }
 #codeSchool-count h5 { text-align: center }
 #codeSchool-enrolledbBadges li { width: 10.5% }
 .more-on-treehouse{font-size: 2em;}
+.more-on-treehouse a {
+                opacity: .6;
+                position: relative;
+                display: inline-block;
+                top: 4px;
+                font-weight: 600;
+                font-family: helvetica neue;
+                -webkit-font-smoothing: antialiased;
+                z-index: 1 !important;
+                background-image: url('../img/gray-badge.png');
+                width: 100%;
+                background-position: 0px 0px;
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
 @media (min-width: 1200px) { 
   .span12 .badges {margin: 10px 10px 45px 10px;}
   .span12 .more-on-treehouse{font-size: 4.3em;top:10px;}
@@ -191,7 +192,8 @@ img.moretreebadge { opacity: .6 }
 
 }
 @media (min-width: 481px) and (max-width: 767px) { 
-  .more-on-treehouse{font-size: 3em; top: 8px;}
+  .more-on-treehouse{font-size: 2em; top: 8px;}
+  .span8 .more-on-treehouse{font-size: 2em;}
 }
 @media (max-width: 600px) { 
   .more-on-treehouse{font-size: 2em;top: 4px}
