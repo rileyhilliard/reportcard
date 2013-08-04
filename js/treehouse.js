@@ -95,8 +95,6 @@ function calcHeight(){
     var $more = $('.more-on-treehouse a');
     $.each($more, function(){
         var height = $(this).parent().parent().find('li:first-child img').height();
-        console.log('calc\'d height is:'+height);
-        console.log($(this).parent().parent().find('li:first-child img'));
         $(this).height(height).css('line-height',height+"px");
     }); 
 }
@@ -108,7 +106,6 @@ function firstImageLoad(){
 
     // one instead of on, because it need only fire once per image
     $images.one("load",function(){
-        console.log(counter);
          // increment counter everytime an image finishes loading
          counter++;
          if (counter == imageCount) {
@@ -180,7 +177,7 @@ $.ajax({
     }
 });
 
-// re-calc 'more' badge height on resize
+// re-calc more badge height
 $(window).resize(function() {
     calcHeight();
 });
