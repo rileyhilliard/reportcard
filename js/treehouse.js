@@ -1,4 +1,3 @@
-
 // Configuration
 var treehouseUserName = "rileyhilliard";
 var treehouseJsonUrl = "http://teamtreehouse.com/"+treehouseUserName+".json";
@@ -95,11 +94,37 @@ function generateTreehouseBadges(badges) {
 function calcHeight(){
     var $more = $('.more-on-treehouse a');
     $.each($more, function(){
-        var height = $(this).parent().parent().find('li:first-child').height();
-        console.log(height);
+        var height = $(this).parent().parent().find('li:first-child img').height();
+        console.log('calc\'d height is:'+height);
+        console.log($(this).parent().parent().find('li:first-child img'));
         $(this).height(height).css('line-height',height+"px");
+    }); 
+}
+
+function firstImageLoad(){
+    var $images = $(".badges img"), 
+        imageCount = $images.length, 
+        counter = 0;
+
+    // one instead of on, because it need only fire once per image
+    $images.one("load",function(){
+        console.log(counter);
+         // increment counter everytime an image finishes loading
+         counter++;
+         if (counter == imageCount) {
+            // do stuff when all have loaded
+            calcHeight();
+         } 
+    }).each(function () {
+        if (this.complete) {
+            // manually trigger load event in
+            // event of a cache pull
+            $(this).trigger("load");
+            calcHeight();
+        }
     });
 }
+
 function reloadTips() {
     $('.progress div').tooltip();
     $('.badges img').tooltip();
@@ -151,10 +176,11 @@ $.ajax({
         $('.loadinggif').remove();
         $(".treehouse-badges").fadeIn(1000).slideDown();
         reloadTips();
+        firstImageLoad();
     }
 });
 
-// re-calc more badge height
+// re-calc 'more' badge height on resize
 $(window).resize(function() {
     calcHeight();
 });
