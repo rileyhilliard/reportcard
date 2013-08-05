@@ -1,5 +1,5 @@
 	A full walkthrough of the installation of this report card widget
-	  can be found at http://treehouse.rileyh.com/instructions.html
+	  can be found at http://reportcard.rileyh.com/instructions.html
 
 	  
 ################################################################################
