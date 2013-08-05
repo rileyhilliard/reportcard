@@ -161,7 +161,7 @@ $.ajax({
     },
     // If ajax succeeds
     success: function (data) {
-        var dObj = JSON.parse(data);
+        var dObj = (typeof data === "string") ?  JSON.parse(data) : data;
         var latest = reverseSortObject(dObj.points);
         $(".treehouse-badges").append('<h1>I have passed ' + dObj.badges.length + ' lessons and scored ' + numberWithCommas(dObj.points.total) + ' points at Treehouse!</h1><p>Check out some of my last passed course content at the badges below: </p>');
         generateTreehouseBadges(dObj.badges.reverse());
