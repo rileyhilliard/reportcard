@@ -161,9 +161,10 @@ $.ajax({
     },
     // If ajax succeeds
     success: function (data) {
-        var latest = reverseSortObject(data.points);
-        $(".treehouse-badges").append('<h1>I have passed ' + data.badges.length + ' lessons and scored ' + numberWithCommas(data.points.total) + ' points at Treehouse!</h1><p>Check out some of my last passed course content at the badges below: </p>');
-        generateTreehouseBadges(data.badges.reverse());
+        var dObj = JSON.parse(data);
+        var latest = reverseSortObject(dObj.points);
+        $(".treehouse-badges").append('<h1>I have passed ' + dObj.badges.length + ' lessons and scored ' + numberWithCommas(dObj.points.total) + ' points at Treehouse!</h1><p>Check out some of my last passed course content at the badges below: </p>');
+        generateTreehouseBadges(dObj.badges.reverse());
         generateTreehousePoints(latest);
     },
     // If ajax fails
