@@ -54,7 +54,7 @@ function badgeBuilder(treeBadges) {
         var earnedDate = monthNames[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
 
         if (e < count - 1) {
-            badgesArray += '<li style="width: ' + Math.floor((91.5 / count) * 100) / 100 + '%"><a href="' + treeBadges[e].url + '" title="I earned the ' + treeBadges[e].name + ' badge on ' + earnedDate + '" target="_blank"><img class="treebadge" src="http:' + treeBadges[e].icon_url + '" alt="' + treeBadges[e].name + '" title="I earned the \'' + treeBadges[e].name + '\' badge on ' + earnedDate + '"/></a></li>';
+            badgesArray += '<li style="width: ' + Math.floor((91.5 / count) * 100) / 100 + '%"><a href="' + treeBadges[e].url + '" title="I earned the ' + treeBadges[e].name + ' badge on ' + earnedDate + '" target="_blank"><img class="treebadge" src="' + treeBadges[e].icon_url + '" alt="' + treeBadges[e].name + '" title="I earned the \'' + treeBadges[e].name + '\' badge on ' + earnedDate + '"/></a></li>';
         } else {
             badgesArray += '<li style="width: ' + Math.floor((91.5 / count) * 100) / 100 + '%" class="more-on-treehouse"><a href="http://teamtreehouse.com/'+treehouseUserName+'" target="_blank" title="Check out the other ' + (badgesCount - count + 1) + ' badges at Treehouse!" >+' + (badgesCount - count + 1) + '</a></li>';
         }
