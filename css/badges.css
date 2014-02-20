@@ -4,6 +4,7 @@
 .badges li img,
 #codeSchool-count img,
 .more-badges a {
+    width: 100%;
     text-align: center;
     -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2)));
 }
@@ -74,7 +75,10 @@
     margin: 2px;
 }
 .report-card { text-align: center }
-.badges { margin: 10px 10px 25px 10px }
+.badges {
+margin: 10px 10px 25px 10px;
+padding: 0;
+}
 .span4 .badges.codeschool li:last-child { display: none }
 /* ===[ Controls Header Formatting ]===
    ================================================== */

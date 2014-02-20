@@ -48,7 +48,6 @@ function calcHeight() {
         function calculateTreehouseDemensions(){
             $.each($('.report-card.treehouse'), function(){
                 var widgetWidth = $(this).width();
-                console.log(widgetWidth);
                 if(widgetWidth > 899){
                     $(this).find('.more-badges').css('font-size', '45px');
                     $(this).find('h1').css({"font-size": "3em","line-height": "1.2em"});
@@ -332,11 +331,7 @@ function calcHeight() {
                     $('.report-card.codeschool').fadeIn(1000);
                 }
             });
-
-
         }
-
-
         // This is the easiest way to have default options.
         var settings = $.extend({
             // These are the defaults.
