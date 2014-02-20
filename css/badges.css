@@ -1,21 +1,18 @@
-.span4 h1{
-  font-size: 1.4em;
-  line-height: 1.5em;
-}
+
 .treehouse-badges { text-align: center }
 #badge .more-badges a { font-weight: bold !important }
 .badges li img,
 #codeSchool-count img,
-.more-badges a { text-align: center; -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2))) }
-#codeSchool-badges img { -webkit-box-reflect: below -5px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2))) }
-.more-badges { position: relative;}
-.more-badges span {
-
-    vertical-align: middle;
+.more-badges a {
+    text-align: center;
+    -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2)));
 }
+#codeSchool-badges img { -webkit-box-reflect: below -5px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2))) }
+.more-badges { position: relative }
+.more-badges span { vertical-align: middle }
 .more-badges,
 .more-badges a {
-    color: rgb(235, 235, 235);
+    color: rgb(24, 24, 24);
     text-decoration: none;
 }
 .back-image {
@@ -24,7 +21,7 @@
 .more-badges span:hover,
 .more-badges a:hover {
     opacity: 1;
-    color: #FFF;
+    color: #000;
 }
 .tooltip.in { opacity: .9 }
 #codeSchool-badges li,
@@ -32,8 +29,10 @@
     width: 70px;
     display: inline-block;
 }
-/* Custom Styles by Riley */
-/*Tree House Chart*/
+/* ===[ Custom Styles by Riley ]===
+   ================================================== */
+/* ===[ Tree House Chart ]===
+   ================================================== */
 #treehouseBadgeChartHolder {
     width: 1200px;
     margin: 0 auto;
@@ -60,63 +59,42 @@
     float: left;
     margin-right: 5px;
 }
-.badgesChart li .progress,
-.ChartKey .progress span { background: #4DC46F !important }
-.badgesChart li .bar.html,
-.ChartKey .html span { background: #18A6D1 }
-.badgesChart li .bar.css,
-.ChartKey .css span { background: #FF6136 }
-.badgesChart li .bar.javascript,
-.ChartKey .javascript span { background: #1bdbe5 }
-.badgesChart li .bar.ruby,
-.ChartKey .ruby span { background: #d62222 }
-.badgesChart li .bar.ios,
-.ChartKey .ios span { background: #9776C1 }
-.badgesChart li .bar.business,
-.ChartKey .business span { background: #AD7745 }
-.badgesChart li .bar.android,
-.ChartKey .android span { background: #005F7C }
-.badgesChart li .bar.php,
-.ChartKey .php span { background: #A2226B }
-.badgesChart li .bar.wordpress,
-.ChartKey .wordpress span { background: #6B7005 }
-.badgesChart li .bar.design,
-.ChartKey .design span { background: #DEBEFA }
-.badgesChart li .bar.dev,
-.ChartKey .dev span { background: #6C5A72 }
-.badgesChart li .bar.git,
-.ChartKey .git span { background: #FFB800 }
-/* Badges CSS */
-/* Controls width of the widget */
+/* ===[ Badges CSS ]===
+   ================================================== */
+/* ===[ Controls width of the widget ]===
+   ================================================== */
 .badge-container {
     width: 700px;
     margin: 0 auto;
 }
-/* Makes Badges display inline */
+/* ===[ Makes Badges display inline ]===
+   ================================================== */
 .badges li {
     display: inline-block;
     margin: 2px;
 }
-
-.report-card {
-text-align: center;
-}
-
-/* Controls badges row offset. THIS FUNCTION WILL CHANGE BASED ON THE NUMBER OF BADGES PER ROW */
-/* Indent 30px every eleventh badge, repeat every 20 badges */
-/* #badges li:nth-child(20n+11) {margin-left:30px;} _NO__DOTCOMMA__AFTER__*/
-/* Controls badges size and alignment */
-
-.badges { margin: 10px 10px 25px 10px; }
-.span4 .badges.codeschool li:last-child{ display: none;}
-/* Controls Header Formatting */
+.report-card { text-align: center }
+/* ===[ Controls badges row offset. THIS FUNCTION WILL CHANGE BASED ON THE NUMBER OF BADGES PER ROW ]===
+   ================================================== */
+/* ===[ Indent 30px every eleventh badge, repeat every 20 badges ]===
+   ================================================== */
+/* #badges li:nth-child(20n+11) {margin-left:30px;} _NO__DOTCOMMA__AFTER___NO__DOTCOMMA__AFTER__
+   ==================================================
+   ================================================== */
+/* ===[ Controls badges size and alignment ]===
+   ================================================== */
+.badges { margin: 10px 10px 25px 10px }
+.span4 .badges.codeschool li:last-child { display: none }
+/* ===[ Controls Header Formatting ]===
+   ================================================== */
 .badge-container h1 {
     text-align: center;
     font-family: 'Helvetica Neue';
     font-weight: bold;
     -webkit-font-smoothing: antialiased;
 }
-/* Controls badges on-hover opacity */
+/* ===[ Controls badges on-hover opacity ]===
+   ================================================== */
 .badges li img:hover { opacity: .7 }
 .badges li img:hover {
     animation: treehouse 100ms;
@@ -128,24 +106,24 @@ text-align: center;
 }
 img.moretreebadge { opacity: .6 }
 @keyframes treehouse { 
-    0% { margin: -17px 2px 0px 0px }
-    50% { margin: -27px 2px 0px 0px }
-    100% { margin: -17px 2px 0px 0px }
+  0% { margin: -17px 2px 0px 0px }
+  50% { margin: -27px 2px 0px 0px }
+  100% { margin: -17px 2px 0px 0px }
 }
 @-webkit-keyframes treehouse /* Safari and Chrome */ { 
-    0% { margin: -17px 2px 0px 0px }
-    50% { margin: -27px 2px 0px 0px }
-    100% { margin: -17px 2px 0px 0px }
+  0% { margin: -17px 2px 0px 0px }
+  50% { margin: -27px 2px 0px 0px }
+  100% { margin: -17px 2px 0px 0px }
 }
 @keyframes codeschool { 
-    0% { margin: 0px 0px 0px 0px }
-    50% { margin: 0px 0px 0px 0px }
-    100% { margin: 0px 0px 0px 0px }
+  0% { margin: 0px 0px 0px 0px }
+  50% { margin: 0px 0px 0px 0px }
+  100% { margin: 0px 0px 0px 0px }
 }
 @-webkit-keyframes codeschool /* Safari and Chrome */ { 
-    0% { margin: 0px 0px 0px 0px }
-    50% { margin: -10px 0px 0px 0px }
-    100% { margin: 0px 0px 0px 0px }
+  0% { margin: 0px 0px 0px 0px }
+  50% { margin: -10px 0px 0px 0px }
+  100% { margin: 0px 0px 0px 0px }
 }
 #treehouse-count h2 { text-align: center }
 #treehouse-count p { text-align: center }
@@ -153,63 +131,73 @@ img.moretreebadge { opacity: .6 }
     margin: 80px auto 0;
     width: 450px;
 }
-
 #treehouse-count h5,
 #codeSchool-count h5 { text-align: center }
 #codeSchool-enrolledbBadges li { width: 10.5% }
-.more-badges{font-size: 2em;}
+.more-badges { font-size: 2em }
 .more-badges a {
-                opacity: .6;
-                position: relative;
-                display: inline-block;
-                top: 4px;
-                font-weight: 600;
-                font-family: helvetica neue;
-                -webkit-font-smoothing: antialiased;
-                z-index: 1 !important;
-                background-image: url('../img/gray-badge.png');
-                width: 100%;
-                background-position: 0px 0px;
-                background-repeat: no-repeat;
-                background-size: contain;
-            }
-@media (min-width: 1200px) { 
-  .span12 .badges {margin: 10px 10px 45px 10px;}
-  .span12 .more-badges{font-size: 4.3em;top:10px;}
-  .span8 .more-badges{font-size: 3em;top:6px;}
-  .more-badges{font-size: 2em;}
-  .span4 .more-badges{font-size: 1.5em;}
-  .span12 .report-card.codeschool h5{font-size: 2.5em; line-height: 34px;}
-
+    opacity: .6;
+    position: relative;
+    display: inline-block;
+    top: 4px;
+    font-weight: 600;
+    font-family: helvetica neue;
+    -webkit-font-smoothing: antialiased;
+    z-index: 1 !important;
+    width: 100%;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
-@media (min-width: 980px) and (max-width: 1200px) { 
-  .span12 .more-badges{font-size: 4em;top:11px;}
-  .span8 .more-badges{font-size: 2.5em;top:4px;}
-  .more-badges{font-size: 1.75em;}
-  .span4 .more-badges{font-size: 1.1em; top: -2px;}
-  .span4 .badges li{margin: 0 1px;}
-  .span4 h1{font-size: 1.8em; line-height: 26px}
-
+.more-on-treehouse a {
+    opacity: .6;
+    position: relative;
+    display: inline-block;
+    top: 4px;
+    font-weight: 600;
+    font-family: helvetica neue;
+    -webkit-font-smoothing: antialiased;
+    z-index: 1 !important;
+    background-image: url('../img/gray-badge.png');
+    width: 100%;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
-@media (min-width: 768px) and (max-width: 979px) { 
-  .span12 .more-badges{font-size: 3em;top:11px;}
-  .span8 .more-badges{font-size: 2em;top:4px;}
-  .more-badges{font-size: 1.75em;}
-  .span4 .more-badges{font-size: .9em; top: -2px; font-weight: 500;}
-  .span4 .badges li{margin: 0 1px;}
-  .span4 h1{font-size: 1.8em; line-height: 26px}
-  .span4 .badges {margin: 10px;}
-
+.loadinggif {
+    position: relative;
+    margin-top: 25px;
+    height: 100px;
 }
-@media (min-width: 481px) and (max-width: 767px) { 
-  .more-badges{font-size: 2em; top: 8px;}
-  .span8 .more-badges{font-size: 2em;}
+.spinftw {
+    margin: 25px auto;
+    border-radius: 100%;
+    display: block;
+    height: 25px;
+    width: 25px;
+    -webkit-animation: loader infinite 4s;
+    -moz-animation: loader infinite 4s;
+    animation: loader infinite 4s;
+    box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71;
 }
-@media (max-width: 600px) { 
-  .more-badges{font-size: 2em;top: 4px}
-  .treehouse-badges h1{font-size: 1.8em; line-height: 26px}
+@-webkit-keyframes loader { 
+  0%,
+  100% { box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71 }
+  25% { box-shadow: -25px 25px #3498db, -25px -25px #9b59b6, 25px -25px #e74c3c, 25px 25px #2ecc71 }
+  50% { box-shadow: -25px -25px #3498db, 25px -25px #9b59b6, 25px 25px #e74c3c, -25px 25px #2ecc71 }
+  75% { box-shadow: 25px -25px #3498db, 25px 25px #9b59b6, -25px 25px #e74c3c, -25px -25px #2ecc71 }
 }
-@media (max-width: 480px) { 
-    .more-badges{font-size: 1.3em;top: 0px}
-    .badges li { margin: 1px }
+@-moz-keyframes loader { 
+  0%,
+  100% { box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71 }
+  25% { box-shadow: -25px 25px #3498db, -25px -25px #9b59b6, 25px -25px #e74c3c, 25px 25px #2ecc71 }
+  50% { box-shadow: -25px -25px #3498db, 25px -25px #9b59b6, 25px 25px #e74c3c, -25px 25px #2ecc71 }
+  75% { box-shadow: 25px -25px #3498db, 25px 25px #9b59b6, -25px 25px #e74c3c, -25px -25px #2ecc71 }
+}
+@keyframes loader { 
+  0%,
+  100% { box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71 }
+  25% { box-shadow: -25px 25px #3498db, -25px -25px #9b59b6, 25px -25px #e74c3c, 25px 25px #2ecc71 }
+  50% { box-shadow: -25px -25px #3498db, 25px -25px #9b59b6, 25px 25px #e74c3c, -25px 25px #2ecc71 }
+  75% { box-shadow: 25px -25px #3498db, 25px 25px #9b59b6, -25px 25px #e74c3c, -25px -25px #2ecc71 }
 }
