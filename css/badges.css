@@ -74,15 +74,6 @@
     margin: 2px;
 }
 .report-card { text-align: center }
-/* ===[ Controls badges row offset. THIS FUNCTION WILL CHANGE BASED ON THE NUMBER OF BADGES PER ROW ]===
-   ================================================== */
-/* ===[ Indent 30px every eleventh badge, repeat every 20 badges ]===
-   ================================================== */
-/* #badges li:nth-child(20n+11) {margin-left:30px;} _NO__DOTCOMMA__AFTER___NO__DOTCOMMA__AFTER__
-   ==================================================
-   ================================================== */
-/* ===[ Controls badges size and alignment ]===
-   ================================================== */
 .badges { margin: 10px 10px 25px 10px }
 .span4 .badges.codeschool li:last-child { display: none }
 /* ===[ Controls Header Formatting ]===

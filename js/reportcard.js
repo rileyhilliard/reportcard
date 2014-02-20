@@ -45,22 +45,6 @@ function calcHeight() {
             $('.progress div, .badges img, .more-badges a').tooltip();
         }
 
-        function reverseSortObject(obj) {
-            var arr = [];
-            for (var prop in obj) {
-                if (obj.hasOwnProperty(prop)) {
-                    arr.push({
-                        'key': prop,
-                        'value': obj[prop]
-                    });
-                }
-            }
-            arr.sort(function (a, b) {
-                return b.value - a.value;
-            });
-            return arr;
-        }
-
         function calculateTreehouseDemensions(){
             $.each($('.report-card.treehouse'), function(){
                 var widgetWidth = $(this).width();
@@ -154,7 +138,6 @@ function calcHeight() {
                 },
                 success: function (data) {
                     var dObj = (typeof data === "string") ? JSON.parse(data) : data;
-                    var latest = reverseSortObject(dObj.points);
                     $(".report-card.treehouse").append('<h1>I have passed ' + dObj.badges.length + ' lessons and scored ' + numberWithCommas(dObj.points.total) + ' points at Treehouse!</h1><p>Check out some of my last passed course content at the badges below: </p>');
                     generateBadges(dObj.badges.reverse());
                 },
@@ -174,7 +157,6 @@ function calcHeight() {
         function codeschoolReportCard(options) {
             var username = options.userName,
                 codeschoolJsonUrl = 'https://www.codeschool.com/users/' + username + '.json',
-                progressBar = [],
                 totalScore = 0;
 
             var javaScript = 0,
