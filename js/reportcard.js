@@ -295,9 +295,7 @@ function calcHeight() {
                 obj.total = total;
 
                 // Fix STUPID Codeschool 'Total Score' format
-                var x = data.user.total_score;
-                totalScore = x.replace("<b>", "").replace("</b>", "").replace("Total Points", "");
-
+                var totalScore = data.user.total_score;
                 $('.report-card.codeschool').append('<h5>I\'ve completed ' + compleatedCourses.length + ' courses, earned ' + data.badges.length + ' badges, and scored ' + numberWithCommas(totalScore) + ' points at CodeSchool!</h5>');
                 $('.report-card.codeschool').append(complete);
                 $('.report-card.codeschool').append('<hr><p>I am also currently enrolled in ' + enrolledCourses.length + ' additional courses, including: <p>');
