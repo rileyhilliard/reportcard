@@ -82,7 +82,7 @@ function calcHeight() {
                     summary = "<p>Some of the last few courses I've taken were on ";
 
                 badgesArray += '<ul class="badges">';
-                for (var e = 0; e < count; e++) {
+                for (var e = 0; e < count && e < badgesCount; e++) {
                     var date = new Date(badges[e].earned_date);
                     var earnedDate = calcDate(date);
 
@@ -323,7 +323,7 @@ function calcHeight() {
                 error: function () {
                     console.log('error...');
                 },
-                // When succeed or fail procees completes 
+                // When succeed or fail procees completes
                 complete: function () {
                     $('.report-card.codeschool').prev().remove();
                     $('.report-card.codeschool').fadeIn(1000);
