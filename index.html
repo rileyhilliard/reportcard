@@ -19,8 +19,6 @@
         </style>
         <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/badges.css">
-
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -41,7 +39,7 @@
                             <li class="active"><a target="_blank" href="http://rileyh.com">Rileyh.com</a></li>
                             <li class="dropdown pull-right">
                                 <a href="#" class="dropdown-toggle pull-right" data-toggle="dropdown">Get Social <b class="caret"></b></a>
-                                
+
 
                                 <ul class="dropdown-menu">
                                     <li><a href="https://twitter.com/rileyhSD" target="_blank">Twitter</a></li>
@@ -71,19 +69,19 @@
             <!-- Example row of columns -->
             <h1>Treehouse</h1>
             <div class="row">
-                <div class="span12"> 
+                <div class="span12">
                     <div class="well clearfix ">
                         <div class="report-card treehouse"></div>
                     </div>
                 </div>
             </div>
              <div class="row">
-                <div class="span4"> 
+                <div class="span4">
                     <div class="well clearfix ">
                         <div class="report-card treehouse"></div>
                     </div>
                 </div>
-                <div class="span8"> 
+                <div class="span8">
                     <div class="well clearfix ">
                         <div class="report-card treehouse"></div>
                     </div>
@@ -94,19 +92,19 @@
             <h1>Code School</h1>
              <!-- Example row of columns -->
             <div class="row">
-                <div class="span12"> 
+                <div class="span12">
                     <div class="well clearfix ">
                         <div class="report-card codeschool"></div>
                     </div>
                 </div>
             </div>
              <div class="row">
-                <div class="span4"> 
+                <div class="span4">
                     <div class="well clearfix ">
                         <div class="report-card codeschool"></div>
                     </div>
                 </div>
-                <div class="span8"> 
+                <div class="span8">
                     <div class="well clearfix ">
                         <div class="report-card codeschool"></div>
                     </div>
@@ -121,7 +119,7 @@
 
         </div> <!-- /container -->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
 
         <script src="js/vendor/bootstrap.min.js"></script>
@@ -131,13 +129,15 @@
             $('.report-card.treehouse').reportCard({
                 userName: 'rileyhilliard',
                 site: 'treehouse',
-                badgesAmount: 7
+                badgesAmount: 7,
+                tooltips: true
             });
 
             $('.report-card.codeschool').reportCard({
                 userName: 'djri',
                 site: 'codeschool',
-                badgesAmount: 6
+                badgesAmount: 6,
+                tooltips: true
             });
         </script>
     </body>
