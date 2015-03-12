@@ -1,320 +1,205 @@
-calcHeight = ->
-  $more = $(".more-badges a")
-  $.each $more, ->
-    height = $(this).parent().parent().find("li:first-child img").height()
-    $(this).height(height).css "line-height", height + "px"
+# github.com/paulirish/jquery-ajax-localstorage-cache
+# dependent on Modernizr's localStorage test
+$.ajaxPrefilter (options, originalOptions, jqXHR) ->
+  # Cache it ?
+  # Modernizr.localstorage, version 3 12/12/13
+
+  hasLocalStorage = ->
+    mod = 'modernizr'
+    try
+      localStorage.setItem mod, mod
+      localStorage.removeItem mod
+      return true
+    catch e
+      return false
     return
+
+  if !hasLocalStorage() or !options.localCache
+    return
+  hourstl = options.cacheTTL or 5
+  cacheKey = options.cacheKey or options.url.replace(/jQuery.*/, '') + options.type + (options.data or '')
+  # isCacheValid is a function to validate cache
+  if options.isCacheValid and !options.isCacheValid()
+    localStorage.removeItem cacheKey
+  # if there's a TTL that's expired, flush this item
+  ttl = localStorage.getItem(cacheKey + 'cachettl')
+  if ttl and ttl < +new Date
+    localStorage.removeItem cacheKey
+    localStorage.removeItem cacheKey + 'cachettl'
+    ttl = 'expired'
+  value = localStorage.getItem(cacheKey)
+  if value
+    #In the cache? So get it, apply success callback & abort the XHR request
+    # parse back to JSON if we can.
+    if options.dataType.indexOf('json') == 0
+      value = JSON.parse(value)
+    options.success value
+    # Abort is broken on JQ 1.5 :(
+    jqXHR.abort()
+  else
+    #If it not in the cache, we change the success callback, just put data on localstorage and after that apply the initial callback
+    if options.success
+      options.realsuccess = options.success
+
+    options.success = (data) ->
+      strdata = data
+      if @dataType.indexOf('json') == 0
+        strdata = JSON.stringify(data)
+      # Save the data to localStorage catching exceptions (possibly QUOTA_EXCEEDED_ERR)
+      try
+        localStorage.setItem cacheKey, strdata
+      catch e
+        # Remove any incomplete data that may have been saved before the exception was caught
+        localStorage.removeItem cacheKey
+        localStorage.removeItem cacheKey + 'cachettl'
+        if options.cacheError
+          options.cacheError e, cacheKey, strdata
+      if options.realsuccess
+        options.realsuccess data
+      return
+
+    # store timestamp
+    if !ttl or ttl == 'expired'
+      localStorage.setItem cacheKey + 'cachettl', +new Date + 1000 * 60 * 60 * hourstl
   return
+
+
+### Reportcard.js ###
+# github.com/rileyhilliard/reportcard
 (($) ->
   $.fn.reportCard = (options) ->
-    numberWithCommas = (x) ->
-      x.toString().replace /\B(?=(\d{3})+(?!\d))/g, ","
-    calcDate = (date) ->
-      monthNames = [
-        "January"
-        "February"
-        "March"
-        "April"
-        "May"
-        "June"
-        "July"
-        "August"
-        "September"
-        "October"
-        "November"
-        "December"
-      ]
-      monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
-    firstImageLoad = ->
-      $images = $(".badges img")
-      imageCount = $images.length
-      counter = 0
+    toThousands = (x)->
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-      # one instead of on, because it need only fire once per image
-      # increment counter everytime an image finishes loading
-      # do stuff when all have loaded
-      $images.one("load", ->
-        counter++
-        calcHeight()  if counter is imageCount
-        return
-      ).each ->
-        if @complete
-          # manually trigger load event in
-          # event of a cache pull
-          $(this).trigger "load"
-          calcHeight()
-        return
+    class ReportCard
+      constructor: (params) ->
+        console.log('constructing',params)
+        {@userName, @site, @badgesAmount, @tooltips} = params
 
-      return
-    reloadTips = ->
-      $(".progress div, .badges img, .more-badges a").tooltip()
-      return
-    calculateTreehouseDemensions = ->
-      $.each $(".report-card.treehouse"), ->
-        widgetWidth = $(this).width()
-        if widgetWidth > 899
-          $(this).find(".more-badges").css "font-size", "45px"
-          $(this).find("h1").css
-            "font-size": "3em"
-            "line-height": "1.2em"
+      #Build HTML object
+      build: (data)->
 
-        else if widgetWidth > 579
-          $(this).find(".more-badges").css "font-size", "30px"
-          $(this).find("h1").css
-            "font-size": "2em"
-            "line-height": "1.2em"
+        lastBadges = data.badges[-(options.badgesAmount)..]
+        liWidth = (100 / (lastBadges.length + 1)) + "%"
 
-        else if widgetWidth < 500
-          $(this).find(".more-badges").css "font-size", "20px"
-          $(this).find("h1").css
-            "font-size": "20px"
-            "line-height": "25px"
+        # HTML Generator
+        html = """
+          <h2>I have passed #{data.badge_count} lessons and scored #{toThousands(data.points_total)} points at #{data.site}!</h2>
+          <p>Check out some of my last passed course content at the badges below: </p>
+          <ul class="badges">
+        """
+        # Badge Generator
+        lastBadges.forEach (badge)->
+          html += """
+            <li style="width: #{liWidth};" title="#{badge.label}">
+              <a href="#{data.profile_url}" target="_blank" data-toggle="tooltip" data-placement="top" >
+                <img src="#{badge.icon_url}" alt="#{badge.label}"/>
+              </a>
+            </li>
+          """
 
-        else if widgetWidth < 261
-          $(this).find(".more-badges").css
-            width: "9%"
-            "font-size": "15px"
+        html += "</ul>"
 
-        if widgetWidth > 300
-          $(this).find(".more-badges").show()
-        else
-          $(this).find(".more-badges").hide()
+        # print generated HTML to page
+        options.$element.html(html)
+
+        # If Tooltips, call bootstrap tooltip plugin
+        if options.tooltips
+          options.$element.each (i, el)->
+            $(el).find('li').tooltip()
         return
 
-      return
-    treehouseReportCard = (options) ->
-      badgeBuilder = (badges) ->
-        badgesArray = []
-        badgesCount = badges.length
-        count = settings.badgesAmount
-        summary = "<p>Some of the last few courses I've taken were on "
-        badgesArray += "<ul class=\"badges\">"
-        e = 0
+      # Default data transform
+      transform: (data)->
+        return data
 
-        while e < count and e < badgesCount
-          date = new Date(badges[e].earned_date)
-          earnedDate = calcDate(date)
-          if e < count - 1
-            badgesArray += "<li style=\"width: " + (((90 / count) * 100) / 100).toFixed(2) + "%\"><a href=\"" + badges[e].url + "\" title=\"I earned the " + badges[e].name + " badge on " + earnedDate + "\" target=\"_blank\"><img class=\"treebadge\" src=\"" + badges[e].icon_url + "\" alt=\"" + badges[e].name + "\" title=\"I earned the '" + badges[e].name + "' badge on " + earnedDate + "\"/></a></li>"
-          else
-            badgesArray += "<li style=\"width: " + (((90 / count) * 100) / 100).toFixed(2) + "%\" class=\"more-badges\"><a href=\"http://teamtreehouse.com/" + userName + "\" target=\"_blank\" title=\"Check out the other " + (badgesCount - count + 1) + " badges at Treehouse!\" >+" + (badgesCount - count + 1) + "</a></li>"
-          if e < 3
-            summary += "<strong>" + badges[e].name + "</strong>" + ", "
-          else summary += " and <strong>" + badges[e].name + "</strong>!</p>"  if e < 4
-          e++
-        badgesArray += "</ul>"
-        badgesArray + summary
-      generateBadges = (badges) ->
+      # Data AJAX caller
+      getData: (opts)->
+        $this = this
+        $.ajax
+          type: "GET"
+          url: @url
+          localCache: true
+          cacheTTL: 0.5
+          cacheKey: 'reportcard'+options.site+options.userName
+          dataType: opts.dataType
+          crossDomain: true
+          async: true
+          beforeSend: ->
+            # Add loading Gif
+            options.$element.html('<div class="spinner"></div>')
+            return
+          success: (data) ->
+            # transform data, then build widget
+            return $this.build($this.transform(data))
 
-        # Latest Badges Builder
-        badgesArray = badgeBuilder(badges)
+    # Treehosue class
+    class Treehouse extends ReportCard
+      constructor: (params)->
+        super(params)
+        @url = "http://teamtreehouse.com/" + @userName + ".json"
 
-        # Badges this month
-        # Not currently being used, but this could be for a "badeges this month" or "Badges this year"
-        badgesThisMonth = 0
-        badgesThisYear = 0
-        $.each badges, (i) ->
-          badgeDate = Date.parse(badges[i].earned_date)
-          now = Date.parse(new Date())
-          # <-- One Month in Milliseconds
-          badgesThisMonth = badgesThisMonth + 1  if badgeDate > now - 2628000000
-          badgesThisMonth = badgesThisYear + 1  if badgeDate > now - 3.15569e10
-          return
+      getData: ->
+        super({dataType:'json'})
 
-        # Append Badge to badges
-        $(".report-card.treehouse").append badgesArray
-        return
-      userName = options.userName
-      reportCardUrl = "http://teamtreehouse.com/" + options.userName + ".json"
-      $.ajax
-        type: "GET"
-        url: reportCardUrl
-        datatype: "json"
-        async: true
-        cache: false
-        beforeSend: ->
-          $(".report-card.treehouse").parent().prepend gif
-          $(".report-card.treehouse").hide()
-          return
+      transform: (data)->
+        return {
+          site: "Treehouse"
+          username: data.profile_name
+          profile_url: data.profile_url
+          points: data.points
+          points_total: data.points.total
+          badge_count: data.badges.length
+          badges: data.badges.map (badge)->
+            return {
+              courses: badge.courses
+              course_count: badge.courses.length
+              earned_date: Date.parse(badge.earned_date)
+              icon_url: badge.icon_url
+              label: badge.name
+              url: badge.url
+            }
+        }
 
-        success: (data) ->
-          dObj = (if (typeof data is "string") then JSON.parse(data) else data)
-          $(".report-card.treehouse").append "<h1>I have passed " + dObj.badges.length + " lessons and scored " + numberWithCommas(dObj.points.total) + " points at Treehouse!</h1><p>Check out some of my last passed course content at the badges below: </p>"
-          generateBadges dObj.badges.reverse()
-          return
-        complete: ->
-          $(".report-card.treehouse").prev().remove()
-          $(".report-card.treehouse").fadeIn 1000
-          reloadTips() if options.tooltips
-          firstImageLoad()
-          calculateTreehouseDemensions()
-          return
-      return
+    # CodeSchool Class
+    class Codeschool extends ReportCard
+      constructor: (params)->
+        super(params)
+        @url = "https://www.codeschool.com/users/" + @userName + ".json";
 
-    ### CodeSchool Code ###
-    codeschoolReportCard = (options) ->
-      badgeGenerator = (badges) ->
-        completed = ""
-        dividePercentage = ((if badges.length > 2 then 93 else 10))
-        width = (dividePercentage / badges.length).toFixed(2)
-        completed += "<ul class=\"badges codeschool\">"
-        $.each badges, (i) ->
-          title = badges[i].title
-          completed += "<li style=\"width:" + width + "%;\">"
-          completed += "<a href=\"" + badges[i].url + "\" title=\"" + title + "\" target=\"_blank\">"
-          completed += "<img src=\"" + badges[i].badge + "\" title=\"" + title + "\" alt=\"" + title + "\" />"
-          completed += "</a>"
-          completed += "</li>"
-          return
+      getData: ->
+        super({dataType:'jsonp'})
 
-        completed += "</ul>"
-        completed
-      codeschoolBadgeCount = (type) ->
-        $.each type, (i) ->
-          title = type[i].title
-          switch title
-            when "Discover DevTools"
-              dev = dev + 1
-              total = total + 1
-            when "jQuery Air: Captain's Log"
-              javaScript = javaScript + 1
-              total = total + 1
-            when "Anatomy of Backbone.js"
-              javaScript = javaScript + 1
-              total = total + 1
-            when "Git Real"
-              git = git + 1
-              total = total + 1
-            when "Try jQuery"
-              javaScript = javaScript + 1
-              total = total + 1
-            when "Assembling Sass"
-              css = css + 1
-              total = total + 1
-            when "Real-time Web with Node.js"
-              javaScript = javaScript + 1
-              total = total + 1
-            when "Rails Testing for Zombies"
-              ruby = ruby + 1
-              total = total + 1
-            when "CSS Cross-Country"
-              css = css + 1
-              total = total + 1
-            when "CoffeeScript"
-              javaScript = javaScript + 1
-              total = total + 1
-            when "Rails for Zombies 2"
-              ruby = ruby + 1
-              total = total + 1
-            when "Functional HTML5 & CSS3"
-              css = css + 1
-              html = html + 1
-              total = total + 1
-            when "jQuery Air: First Flight"
-              javaScript = javaScript + 1
-              total = total + 1
-            when "Try Git"
-              git = git + 1
-              total = total + 1
-            when "Rails for Zombies Redux"
-              ruby = ruby + 1
-              total = total + 1
-            when "Try Ruby"
-              ruby = ruby + 1
-              total = total + 1
+      transform: (data)->
+        return {
+          site: "Code School"
+          username: data.user.username
+          profile_url: 'https://www.codeschool.com/users/' + data.user.username
+          points: undefined
+          points_total: data.user.total_score
+          badge_count: data.badges.length
+          badges: data.badges.map (badge)->
+            return {
+              courses: undefined
+              course_count: undefined
+              earned_date: undefined
+              icon_url: badge.badge
+              label: badge.name
+              url: badge.course_url
+            }
+        }
 
-        return
-      generateCodeSchoolBadges = (data) ->
-        compleatedCourses = data.courses.completed
-        enrolledCourses = data.courses.in_progress
-        complete = badgeGenerator(compleatedCourses)
-        enrolled = badgeGenerator(enrolledCourses)
-        codeschoolBadgeCount compleatedCourses
-        codeschoolBadgeCount enrolledCourses
-        obj.javascript = javaScript
-        obj.ruby = ruby
-        obj.html = html
-        obj.css = css
-        obj.dev = dev
-        obj.git = git
-        obj.total = total
+    # Init
+    options.$element = this
+    options.badgesAmount = if options.badgesAmount then options.badgesAmount else 5
+    if !options.userName then alert('You need to pass in a username')
+    if !options.site then alert('You need to pass in a site')
 
-        # Fix STUPID Codeschool 'Total Score' format
-        totalScore = data.user.total_score
-        $(".report-card.codeschool").append "<h5>I've completed " + compleatedCourses.length + " courses, earned " + data.badges.length + " badges, and scored " + numberWithCommas(totalScore) + " points at CodeSchool!</h5>"
-        $(".report-card.codeschool").append complete
-        $(".report-card.codeschool").append "<hr><p>I am also currently enrolled in " + enrolledCourses.length + " additional courses, including: <p>"
-        $(".report-card.codeschool").append enrolled
-        $(".report-card.codeschool img, .report-card.codeschool img").tooltip() if options.tooltips
-        return
-      username = options.userName
-      codeschoolJsonUrl = "https://www.codeschool.com/users/" + username + ".json"
-      totalScore = 0
-      javaScript = 0
-      git = 0
-      ruby = 0
-      html = 0
-      css = 0
-      dev = 0
-      total = 0
-      obj = {}
-      $.ajax
-        type: "GET"
-        url: codeschoolJsonUrl
-        dataType: "jsonp"
-        cache: false
+    if options.site == "treehouse"
+      th = new Treehouse options
+      th.getData()
+    else if options.site == "codeschool"
+      cs = new Codeschool options
+      cs.getData()
 
-        # Before ajax is called
-        beforeSend: ->
-          $(".report-card.codeschool").parent().prepend gif
-          $(".report-card.codeschool").hide()
-          return
-
-
-        # If ajax succeeds
-        success: (data) ->
-          generateCodeSchoolBadges data
-          $(".CodeSchool-chart div").tooltip() if options.tooltips
-          return
-
-
-        # If ajax fails
-        error: ->
-          console.log "error..."
-          return
-
-
-        # When succeed or fail procees completes
-        complete: ->
-          $(".report-card.codeschool").prev().remove()
-          $(".report-card.codeschool").fadeIn 1000
-          return
-
-      return
-    gif = "<div class=\"loadinggif\"><p style=\"text-align:center;\">Loading Report Card...</p><div class=\"spinner\"></div></div>"
-
-    # This is the easiest way to have default options.
-    settings = $.extend(
-
-      # These are the defaults.
-      userName: "rileyhilliard"
-      site: "treehouse"
-      badgesAmount: 6
-    , options)
-    if settings.site is "treehouse"
-      treehouseReportCard settings
-    else codeschoolReportCard settings  if settings.site is "codeschool"
-
-    # re-calc more badge height
-    $(window).resize ->
-      calcHeight()
-      calculateTreehouseDemensions()
-      return
-    return
-  return
 ) jQuery
-
-# re-calc more badge height
-$(window).resize ->
-  calcHeight()
-  return
