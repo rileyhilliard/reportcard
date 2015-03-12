@@ -77,7 +77,6 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
     };
     ReportCard = (function() {
       function ReportCard(params) {
-        console.log('constructing', params);
         this.userName = params.userName, this.site = params.site, this.badgesAmount = params.badgesAmount, this.tooltips = params.tooltips;
       }
 

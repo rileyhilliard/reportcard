@@ -73,7 +73,6 @@ $.ajaxPrefilter (options, originalOptions, jqXHR) ->
 
     class ReportCard
       constructor: (params) ->
-        console.log('constructing',params)
         {@userName, @site, @badgesAmount, @tooltips} = params
 
       #Build HTML object
