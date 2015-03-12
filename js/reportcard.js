@@ -1,316 +1,224 @@
-var calcHeight;
+var __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __hasProp = {}.hasOwnProperty;
 
-calcHeight = function() {
-  var $more;
-  $more = $(".more-badges a");
-  $.each($more, function() {
-    var height;
-    height = $(this).parent().parent().find("li:first-child img").height();
-    $(this).height(height).css("line-height", height + "px");
-  });
-};
+$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+  var cacheKey, hasLocalStorage, hourstl, ttl, value;
+  hasLocalStorage = function() {
+    var e, mod;
+    mod = 'modernizr';
+    try {
+      localStorage.setItem(mod, mod);
+      localStorage.removeItem(mod);
+      return true;
+    } catch (_error) {
+      e = _error;
+      return false;
+    }
+  };
+  if (!hasLocalStorage() || !options.localCache) {
+    return;
+  }
+  hourstl = options.cacheTTL || 5;
+  cacheKey = options.cacheKey || options.url.replace(/jQuery.*/, '') + options.type + (options.data || '');
+  if (options.isCacheValid && !options.isCacheValid()) {
+    localStorage.removeItem(cacheKey);
+  }
+  ttl = localStorage.getItem(cacheKey + 'cachettl');
+  if (ttl && ttl < +(new Date)) {
+    localStorage.removeItem(cacheKey);
+    localStorage.removeItem(cacheKey + 'cachettl');
+    ttl = 'expired';
+  }
+  value = localStorage.getItem(cacheKey);
+  if (value) {
+    if (options.dataType.indexOf('json') === 0) {
+      value = JSON.parse(value);
+    }
+    options.success(value);
+    jqXHR.abort();
+  } else {
+    if (options.success) {
+      options.realsuccess = options.success;
+    }
+    options.success = function(data) {
+      var e, strdata;
+      strdata = data;
+      if (this.dataType.indexOf('json') === 0) {
+        strdata = JSON.stringify(data);
+      }
+      try {
+        localStorage.setItem(cacheKey, strdata);
+      } catch (_error) {
+        e = _error;
+        localStorage.removeItem(cacheKey);
+        localStorage.removeItem(cacheKey + 'cachettl');
+        if (options.cacheError) {
+          options.cacheError(e, cacheKey, strdata);
+        }
+      }
+      if (options.realsuccess) {
+        options.realsuccess(data);
+      }
+    };
+    if (!ttl || ttl === 'expired') {
+      localStorage.setItem(cacheKey + 'cachettl', +(new Date) + 1000 * 60 * 60 * hourstl);
+    }
+  }
+});
+
+
+/* Reportcard.js */
 
 (function($) {
-  $.fn.reportCard = function(options) {
-    var calcDate, calculateTreehouseDemensions, codeschoolReportCard, firstImageLoad, gif, numberWithCommas, reloadTips, settings, treehouseReportCard;
-    numberWithCommas = function(x) {
+  return $.fn.reportCard = function(options) {
+    var Codeschool, ReportCard, Treehouse, cs, th, toThousands;
+    toThousands = function(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
-    calcDate = function(date) {
-      var monthNames;
-      monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      return monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
-    };
-    firstImageLoad = function() {
-      var $images, counter, imageCount;
-      $images = $(".badges img");
-      imageCount = $images.length;
-      counter = 0;
-      $images.one("load", function() {
-        counter++;
-        if (counter === imageCount) {
-          calcHeight();
-        }
-      }).each(function() {
-        if (this.complete) {
-          $(this).trigger("load");
-          calcHeight();
-        }
-      });
-    };
-    reloadTips = function() {
-      $(".progress div, .badges img, .more-badges a").tooltip();
-    };
-    calculateTreehouseDemensions = function() {
-      $.each($(".report-card.treehouse"), function() {
-        var widgetWidth;
-        widgetWidth = $(this).width();
-        if (widgetWidth > 899) {
-          $(this).find(".more-badges").css("font-size", "45px");
-          $(this).find("h1").css({
-            "font-size": "3em",
-            "line-height": "1.2em"
-          });
-        } else if (widgetWidth > 579) {
-          $(this).find(".more-badges").css("font-size", "30px");
-          $(this).find("h1").css({
-            "font-size": "2em",
-            "line-height": "1.2em"
-          });
-        } else if (widgetWidth < 500) {
-          $(this).find(".more-badges").css("font-size", "20px");
-          $(this).find("h1").css({
-            "font-size": "20px",
-            "line-height": "25px"
-          });
-        } else if (widgetWidth < 261) {
-          $(this).find(".more-badges").css({
-            width: "9%",
-            "font-size": "15px"
-          });
-        }
-        if (widgetWidth > 300) {
-          $(this).find(".more-badges").show();
-        } else {
-          $(this).find(".more-badges").hide();
-        }
-      });
-    };
-    treehouseReportCard = function(options) {
-      var badgeBuilder, generateBadges, reportCardUrl, userName;
-      badgeBuilder = function(badges) {
-        var badgesArray, badgesCount, count, date, e, earnedDate, summary;
-        badgesArray = [];
-        badgesCount = badges.length;
-        count = settings.badgesAmount;
-        summary = "<p>Some of the last few courses I've taken were on ";
-        badgesArray += "<ul class=\"badges\">";
-        e = 0;
-        while (e < count && e < badgesCount) {
-          date = new Date(badges[e].earned_date);
-          earnedDate = calcDate(date);
-          if (e < count - 1) {
-            badgesArray += "<li style=\"width: " + (((90 / count) * 100) / 100).toFixed(2) + "%\"><a href=\"" + badges[e].url + "\" title=\"I earned the " + badges[e].name + " badge on " + earnedDate + "\" target=\"_blank\"><img class=\"treebadge\" src=\"" + badges[e].icon_url + "\" alt=\"" + badges[e].name + "\" title=\"I earned the '" + badges[e].name + "' badge on " + earnedDate + "\"/></a></li>";
-          } else {
-            badgesArray += "<li style=\"width: " + (((90 / count) * 100) / 100).toFixed(2) + "%\" class=\"more-badges\"><a href=\"http://teamtreehouse.com/" + userName + "\" target=\"_blank\" title=\"Check out the other " + (badgesCount - count + 1) + " badges at Treehouse!\" >+" + (badgesCount - count + 1) + "</a></li>";
-          }
-          if (e < 3) {
-            summary += "<strong>" + badges[e].name + "</strong>" + ", ";
-          } else {
-            if (e < 4) {
-              summary += " and <strong>" + badges[e].name + "</strong>!</p>";
-            }
-          }
-          e++;
-        }
-        badgesArray += "</ul>";
-        return badgesArray + summary;
-      };
-      generateBadges = function(badges) {
-        var badgesArray, badgesThisMonth, badgesThisYear;
-        badgesArray = badgeBuilder(badges);
-        badgesThisMonth = 0;
-        badgesThisYear = 0;
-        $.each(badges, function(i) {
-          var badgeDate, now;
-          badgeDate = Date.parse(badges[i].earned_date);
-          now = Date.parse(new Date());
-          if (badgeDate > now - 2628000000) {
-            badgesThisMonth = badgesThisMonth + 1;
-          }
-          if (badgeDate > now - 3.15569e10) {
-            badgesThisMonth = badgesThisYear + 1;
-          }
-        });
-        $(".report-card.treehouse").append(badgesArray);
-      };
-      userName = options.userName;
-      reportCardUrl = "http://teamtreehouse.com/" + options.userName + ".json";
-      $.ajax({
-        type: "GET",
-        url: reportCardUrl,
-        datatype: "json",
-        async: true,
-        cache: false,
-        beforeSend: function() {
-          $(".report-card.treehouse").parent().prepend(gif);
-          $(".report-card.treehouse").hide();
-        },
-        success: function(data) {
-          var dObj;
-          dObj = (typeof data === "string" ? JSON.parse(data) : data);
-          $(".report-card.treehouse").append("<h1>I have passed " + dObj.badges.length + " lessons and scored " + numberWithCommas(dObj.points.total) + " points at Treehouse!</h1><p>Check out some of my last passed course content at the badges below: </p>");
-          generateBadges(dObj.badges.reverse());
-        },
-        complete: function() {
-          $(".report-card.treehouse").prev().remove();
-          $(".report-card.treehouse").fadeIn(1000);
-          if (options.tooltips) {
-            reloadTips();
-          }
-          firstImageLoad();
-          calculateTreehouseDemensions();
-        }
-      });
-    };
-
-    /* CodeSchool Code */
-    codeschoolReportCard = function(options) {
-      var badgeGenerator, codeschoolBadgeCount, codeschoolJsonUrl, css, dev, generateCodeSchoolBadges, git, html, javaScript, obj, ruby, total, totalScore, username;
-      badgeGenerator = function(badges) {
-        var completed, dividePercentage, width;
-        completed = "";
-        dividePercentage = (badges.length > 2 ? 93 : 10);
-        width = (dividePercentage / badges.length).toFixed(2);
-        completed += "<ul class=\"badges codeschool\">";
-        $.each(badges, function(i) {
-          var title;
-          title = badges[i].title;
-          completed += "<li style=\"width:" + width + "%;\">";
-          completed += "<a href=\"" + badges[i].url + "\" title=\"" + title + "\" target=\"_blank\">";
-          completed += "<img src=\"" + badges[i].badge + "\" title=\"" + title + "\" alt=\"" + title + "\" />";
-          completed += "</a>";
-          completed += "</li>";
-        });
-        completed += "</ul>";
-        return completed;
-      };
-      codeschoolBadgeCount = function(type) {
-        $.each(type, function(i) {
-          var css, dev, git, html, javaScript, ruby, title, total;
-          title = type[i].title;
-          switch (title) {
-            case "Discover DevTools":
-              dev = dev + 1;
-              return total = total + 1;
-            case "jQuery Air: Captain's Log":
-              javaScript = javaScript + 1;
-              return total = total + 1;
-            case "Anatomy of Backbone.js":
-              javaScript = javaScript + 1;
-              return total = total + 1;
-            case "Git Real":
-              git = git + 1;
-              return total = total + 1;
-            case "Try jQuery":
-              javaScript = javaScript + 1;
-              return total = total + 1;
-            case "Assembling Sass":
-              css = css + 1;
-              return total = total + 1;
-            case "Real-time Web with Node.js":
-              javaScript = javaScript + 1;
-              return total = total + 1;
-            case "Rails Testing for Zombies":
-              ruby = ruby + 1;
-              return total = total + 1;
-            case "CSS Cross-Country":
-              css = css + 1;
-              return total = total + 1;
-            case "CoffeeScript":
-              javaScript = javaScript + 1;
-              return total = total + 1;
-            case "Rails for Zombies 2":
-              ruby = ruby + 1;
-              return total = total + 1;
-            case "Functional HTML5 & CSS3":
-              css = css + 1;
-              html = html + 1;
-              return total = total + 1;
-            case "jQuery Air: First Flight":
-              javaScript = javaScript + 1;
-              return total = total + 1;
-            case "Try Git":
-              git = git + 1;
-              return total = total + 1;
-            case "Rails for Zombies Redux":
-              ruby = ruby + 1;
-              return total = total + 1;
-            case "Try Ruby":
-              ruby = ruby + 1;
-              return total = total + 1;
-          }
-        });
-      };
-      generateCodeSchoolBadges = function(data) {
-        var compleatedCourses, complete, enrolled, enrolledCourses, totalScore;
-        compleatedCourses = data.courses.completed;
-        enrolledCourses = data.courses.in_progress;
-        complete = badgeGenerator(compleatedCourses);
-        enrolled = badgeGenerator(enrolledCourses);
-        codeschoolBadgeCount(compleatedCourses);
-        codeschoolBadgeCount(enrolledCourses);
-        obj.javascript = javaScript;
-        obj.ruby = ruby;
-        obj.html = html;
-        obj.css = css;
-        obj.dev = dev;
-        obj.git = git;
-        obj.total = total;
-        totalScore = data.user.total_score;
-        $(".report-card.codeschool").append("<h5>I've completed " + compleatedCourses.length + " courses, earned " + data.badges.length + " badges, and scored " + numberWithCommas(totalScore) + " points at CodeSchool!</h5>");
-        $(".report-card.codeschool").append(complete);
-        $(".report-card.codeschool").append("<hr><p>I am also currently enrolled in " + enrolledCourses.length + " additional courses, including: <p>");
-        $(".report-card.codeschool").append(enrolled);
-        if (options.tooltips) {
-          $(".report-card.codeschool img, .report-card.codeschool img").tooltip();
-        }
-      };
-      username = options.userName;
-      codeschoolJsonUrl = "https://www.codeschool.com/users/" + username + ".json";
-      totalScore = 0;
-      javaScript = 0;
-      git = 0;
-      ruby = 0;
-      html = 0;
-      css = 0;
-      dev = 0;
-      total = 0;
-      obj = {};
-      $.ajax({
-        type: "GET",
-        url: codeschoolJsonUrl,
-        dataType: "jsonp",
-        cache: false,
-        beforeSend: function() {
-          $(".report-card.codeschool").parent().prepend(gif);
-          $(".report-card.codeschool").hide();
-        },
-        success: function(data) {
-          generateCodeSchoolBadges(data);
-          if (options.tooltips) {
-            $(".CodeSchool-chart div").tooltip();
-          }
-        },
-        error: function() {
-          console.log("error...");
-        },
-        complete: function() {
-          $(".report-card.codeschool").prev().remove();
-          $(".report-card.codeschool").fadeIn(1000);
-        }
-      });
-    };
-    gif = "<div class=\"loadinggif\"><p style=\"text-align:center;\">Loading Report Card...</p><div class=\"spinner\"></div></div>";
-    settings = $.extend({
-      userName: "rileyhilliard",
-      site: "treehouse",
-      badgesAmount: 6
-    }, options);
-    if (settings.site === "treehouse") {
-      treehouseReportCard(settings);
-    } else {
-      if (settings.site === "codeschool") {
-        codeschoolReportCard(settings);
+    ReportCard = (function() {
+      function ReportCard(params) {
+        console.log('constructing', params);
+        this.userName = params.userName, this.site = params.site, this.badgesAmount = params.badgesAmount, this.tooltips = params.tooltips;
       }
+
+      ReportCard.prototype.build = function(data) {
+        var html, lastBadges, liWidth;
+        lastBadges = data.badges.slice(-options.badgesAmount);
+        liWidth = (100 / (lastBadges.length + 1)) + "%";
+        html = "<h2>I have passed " + data.badge_count + " lessons and scored " + (toThousands(data.points_total)) + " points at " + data.site + "!</h2>\n<p>Check out some of my last passed course content at the badges below: </p>\n<ul class=\"badges\">";
+        lastBadges.forEach(function(badge) {
+          return html += "<li style=\"width: " + liWidth + ";\" title=\"" + badge.label + "\">\n  <a href=\"" + data.profile_url + "\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" >\n    <img src=\"" + badge.icon_url + "\" alt=\"" + badge.label + "\"/>\n  </a>\n</li>";
+        });
+        html += "</ul>";
+        options.$element.html(html);
+        if (options.tooltips) {
+          options.$element.each(function(i, el) {
+            return $(el).find('li').tooltip();
+          });
+        }
+      };
+
+      ReportCard.prototype.transform = function(data) {
+        return data;
+      };
+
+      ReportCard.prototype.getData = function(opts) {
+        var $this;
+        $this = this;
+        return $.ajax({
+          type: "GET",
+          url: this.url,
+          localCache: true,
+          cacheTTL: 0.5,
+          cacheKey: 'reportcard' + options.site + options.userName,
+          dataType: opts.dataType,
+          crossDomain: true,
+          async: true,
+          beforeSend: function() {
+            options.$element.html('<div class="spinner"></div>');
+          },
+          success: function(data) {
+            return $this.build($this.transform(data));
+          }
+        });
+      };
+
+      return ReportCard;
+
+    })();
+    Treehouse = (function(_super) {
+      __extends(Treehouse, _super);
+
+      function Treehouse(params) {
+        Treehouse.__super__.constructor.call(this, params);
+        this.url = "http://teamtreehouse.com/" + this.userName + ".json";
+      }
+
+      Treehouse.prototype.getData = function() {
+        return Treehouse.__super__.getData.call(this, {
+          dataType: 'json'
+        });
+      };
+
+      Treehouse.prototype.transform = function(data) {
+        return {
+          site: "Treehouse",
+          username: data.profile_name,
+          profile_url: data.profile_url,
+          points: data.points,
+          points_total: data.points.total,
+          badge_count: data.badges.length,
+          badges: data.badges.map(function(badge) {
+            return {
+              courses: badge.courses,
+              course_count: badge.courses.length,
+              earned_date: Date.parse(badge.earned_date),
+              icon_url: badge.icon_url,
+              label: badge.name,
+              url: badge.url
+            };
+          })
+        };
+      };
+
+      return Treehouse;
+
+    })(ReportCard);
+    Codeschool = (function(_super) {
+      __extends(Codeschool, _super);
+
+      function Codeschool(params) {
+        Codeschool.__super__.constructor.call(this, params);
+        this.url = "https://www.codeschool.com/users/" + this.userName + ".json";
+      }
+
+      Codeschool.prototype.getData = function() {
+        return Codeschool.__super__.getData.call(this, {
+          dataType: 'jsonp'
+        });
+      };
+
+      Codeschool.prototype.transform = function(data) {
+        return {
+          site: "Code School",
+          username: data.user.username,
+          profile_url: 'https://www.codeschool.com/users/' + data.user.username,
+          points: void 0,
+          points_total: data.user.total_score,
+          badge_count: data.badges.length,
+          badges: data.badges.map(function(badge) {
+            return {
+              courses: void 0,
+              course_count: void 0,
+              earned_date: void 0,
+              icon_url: badge.badge,
+              label: badge.name,
+              url: badge.course_url
+            };
+          })
+        };
+      };
+
+      return Codeschool;
+
+    })(ReportCard);
+    options.$element = this;
+    options.badgesAmount = options.badgesAmount ? options.badgesAmount : 5;
+    if (!options.userName) {
+      alert('You need to pass in a username');
     }
-    $(window).resize(function() {
-      calcHeight();
-      calculateTreehouseDemensions();
-    });
+    if (!options.site) {
+      alert('You need to pass in a site');
+    }
+    if (options.site === "treehouse") {
+      th = new Treehouse(options);
+      return th.getData();
+    } else if (options.site === "codeschool") {
+      cs = new Codeschool(options);
+      return cs.getData();
+    }
   };
 })(jQuery);
 
-$(window).resize(function() {
-  calcHeight();
-});
+// ---
+// generated by coffee-script 1.9.0

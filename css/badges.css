@@ -1,206 +1,44 @@
+.report-card {
+  text-align:center;
+}
 
-.treehouse-badges { text-align: center }
-#badge .more-badges a { font-weight: bold !important }
-.badges li img,
-#codeSchool-count img,
-.more-badges a {
-    width: 100%;
-    text-align: center;
-    -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2)));
-}
-#codeSchool-badges img { -webkit-box-reflect: below -5px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2))) }
-.more-badges { position: relative }
-.more-badges span { vertical-align: middle }
-.more-badges,
-.more-badges a {
-    color: rgb(24, 24, 24);
-    text-decoration: none;
-}
-.back-image {
-
-}
-.more-badges span:hover,
-.more-badges a:hover {
-    opacity: 1;
-    color: #000;
-}
-.tooltip.in { opacity: .9 }
-#codeSchool-badges li,
-#codeSchool-enrolledbBadges li {
-    width: 70px;
-    display: inline-block;
-}
-/* ===[ Custom Styles by Riley ]===
-   ================================================== */
-/* ===[ Tree House Chart ]===
-   ================================================== */
-#treehouseBadgeChartHolder {
-    width: 1200px;
-    margin: 0 auto;
-}
-.badgesChart {
-    list-style: none;
-    padding-left: 0px;
-    clear: both;
-    padding-top: 10px;
-    text-align: center;
-}
-.ChartKey {
-    list-style: none;
-    padding-left: 0px;
-}
-.ChartKey li {
-    float: left;
-    padding-right: 20px;
-}
-.ChartKey span {
-    height: 20px;
-    width: 20px;
-    display: block;
-    float: left;
-    margin-right: 5px;
-}
-/* ===[ Badges CSS ]===
-   ================================================== */
-/* ===[ Controls width of the widget ]===
-   ================================================== */
-.badge-container {
-    width: 700px;
-    margin: 0 auto;
-}
-/* ===[ Makes Badges display inline ]===
-   ================================================== */
-.badges li {
-    display: inline-block;
-    margin: 2px;
-}
-.report-card { text-align: center }
 .badges {
-margin: 10px 10px 25px 10px;
-padding: 0;
+  margin:10px 10px 25px;
+  padding:0;
 }
-.span4 .badges.codeschool li:last-child { display: none }
-/* ===[ Controls Header Formatting ]===
-   ================================================== */
-.badge-container h1 {
+
+.badges li {
+  display:inline-block;
+  margin:2px;
+}
+
+.badges li img {
+    width: 100%;
     text-align: center;
-    font-family: 'Helvetica Neue';
-    font-weight: bold;
-    -webkit-font-smoothing: antialiased;
+    -webkit-box-reflect: below 0 -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent), to(rgba(255,255,255,0.2)));
 }
-/* ===[ Controls badges on-hover opacity ]===
-   ================================================== */
-.badges li img:hover { opacity: .7 }
+
 .badges li img:hover {
-    animation: treehouse 100ms;
-    -webkit-animation: treehouse 100ms; /* Safari and Chrome */
+  opacity:.7;
+  animation:badges 100ms;
+  -webkit-animation:badges 100ms;
 }
-#codeSchool-count img:hover {
-    animation: codeschool 100ms;
-    -webkit-animation: codeschool 100ms; /* Safari and Chrome */
-}
-img.moretreebadge { opacity: .6 }
-@keyframes treehouse {
+
+@keyframes badges {
   0% { margin: -17px 2px 0px 0px }
   50% { margin: -27px 2px 0px 0px }
   100% { margin: -17px 2px 0px 0px }
 }
-@-webkit-keyframes treehouse /* Safari and Chrome */ {
+@-webkit-keyframes badges /* Safari and Chrome */ {
   0% { margin: -17px 2px 0px 0px }
   50% { margin: -27px 2px 0px 0px }
   100% { margin: -17px 2px 0px 0px }
-}
-@keyframes codeschool {
-  0% { margin: 0px 0px 0px 0px }
-  50% { margin: 0px 0px 0px 0px }
-  100% { margin: 0px 0px 0px 0px }
-}
-@-webkit-keyframes codeschool /* Safari and Chrome */ {
-  0% { margin: 0px 0px 0px 0px }
-  50% { margin: -10px 0px 0px 0px }
-  100% { margin: 0px 0px 0px 0px }
-}
-#treehouse-count h2 { text-align: center }
-#treehouse-count p { text-align: center }
-.chart {
-    margin: 80px auto 0;
-    width: 450px;
-}
-#treehouse-count h5,
-#codeSchool-count h5 { text-align: center }
-#codeSchool-enrolledbBadges li { width: 10.5% }
-.more-badges { font-size: 2em }
-.more-badges a {
-    opacity: .6;
-    position: relative;
-    display: inline-block;
-    top: 4px;
-    font-weight: 600;
-    font-family: helvetica neue;
-    -webkit-font-smoothing: antialiased;
-    z-index: 1 !important;
-    width: 100%;
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-.more-on-treehouse a {
-    opacity: .6;
-    position: relative;
-    display: inline-block;
-    top: 4px;
-    font-weight: 600;
-    font-family: helvetica neue;
-    -webkit-font-smoothing: antialiased;
-    z-index: 1 !important;
-    background-image: url('../img/gray-badge.png');
-    width: 100%;
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-.loadinggif {
-    position: relative;
-    margin-top: 25px;
-    height: 100px;
-}
-.spinftw {
-    margin: 25px auto;
-    border-radius: 100%;
-    display: block;
-    height: 25px;
-    width: 25px;
-    -webkit-animation: loader infinite 4s;
-    -moz-animation: loader infinite 4s;
-    animation: loader infinite 4s;
-    box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71;
-}
-@-webkit-keyframes loader {
-  0%,
-  100% { box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71 }
-  25% { box-shadow: -25px 25px #3498db, -25px -25px #9b59b6, 25px -25px #e74c3c, 25px 25px #2ecc71 }
-  50% { box-shadow: -25px -25px #3498db, 25px -25px #9b59b6, 25px 25px #e74c3c, -25px 25px #2ecc71 }
-  75% { box-shadow: 25px -25px #3498db, 25px 25px #9b59b6, -25px 25px #e74c3c, -25px -25px #2ecc71 }
-}
-@-moz-keyframes loader {
-  0%,
-  100% { box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71 }
-  25% { box-shadow: -25px 25px #3498db, -25px -25px #9b59b6, 25px -25px #e74c3c, 25px 25px #2ecc71 }
-  50% { box-shadow: -25px -25px #3498db, 25px -25px #9b59b6, 25px 25px #e74c3c, -25px 25px #2ecc71 }
-  75% { box-shadow: 25px -25px #3498db, 25px 25px #9b59b6, -25px 25px #e74c3c, -25px -25px #2ecc71 }
-}
-@keyframes loader {
-  0%,
-  100% { box-shadow: 25px 25px #3498db, -25px 25px #9b59b6, -25px -25px #e74c3c, 25px -25px #2ecc71 }
-  25% { box-shadow: -25px 25px #3498db, -25px -25px #9b59b6, 25px -25px #e74c3c, 25px 25px #2ecc71 }
-  50% { box-shadow: -25px -25px #3498db, 25px -25px #9b59b6, 25px 25px #e74c3c, -25px 25px #2ecc71 }
-  75% { box-shadow: 25px -25px #3498db, 25px 25px #9b59b6, -25px 25px #e74c3c, -25px -25px #2ecc71 }
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  margin: 0 auto;
+  margin: 100px auto;
   background-color: #333;
 
   border-radius: 100%;
