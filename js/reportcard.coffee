@@ -136,7 +136,7 @@ $.ajaxPrefilter (options, originalOptions, jqXHR) ->
     class Treehouse extends ReportCard
       constructor: (params)->
         super(params)
-        @url = "http://teamtreehouse.com/" + @userName + ".json"
+        @url = "https://teamtreehouse.com/" + @userName + ".json"
 
       getData: ->
         super({dataType:'json'})

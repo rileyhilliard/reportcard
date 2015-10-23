@@ -130,7 +130,7 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 
       function Treehouse(params) {
         Treehouse.__super__.constructor.call(this, params);
-        this.url = "http://teamtreehouse.com/" + this.userName + ".json";
+        this.url = "https://teamtreehouse.com/" + this.userName + ".json";
       }
 
       Treehouse.prototype.getData = function() {
